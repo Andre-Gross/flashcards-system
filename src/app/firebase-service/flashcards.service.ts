@@ -3,6 +3,6 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class Flashcards {
-  
+export class FlashcardsService {
+  collection?: object[];
 }
