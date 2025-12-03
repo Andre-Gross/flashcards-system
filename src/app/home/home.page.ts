@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FlashcardsService } from '../firebase-service/flashcards.service';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,8 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+    constructor(private flashcardsService: FlashcardsService) {
+        flashcardsService.getFlashcardCollections();
+    }
 
 }
