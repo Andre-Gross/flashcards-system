@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { collection, getDocs, Firestore, query } from '@angular/fire/firestore';
+import { collection, doc, getDoc, getDocs, Firestore, query } from '@angular/fire/firestore';
 
 @Injectable({
     providedIn: 'root',
@@ -16,5 +16,19 @@ export class FlashcardsService {
         });
             return idsOfFlashcardCollections;
     }
+
+
+    async returnFlashcardCollectionData(id: string) {
+        const docSnap = await getDoc(this.getDocRef(id));
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            return "Collection not found";
+        }
+    }
+
+
+    getDocRef(id: string) {
+        return doc(this.firestore, "flashcard-collections", id);
     }
 }
