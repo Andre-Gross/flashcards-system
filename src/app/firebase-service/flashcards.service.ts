@@ -7,11 +7,14 @@ import { collection, getDocs, Firestore, query } from '@angular/fire/firestore';
 export class FlashcardsService {
     firestore = inject(Firestore);
 
-    async getFlashcardCollections() {
+    async listFlashcardCollections() {
         const q = query(collection(this.firestore, 'flashcard-collections'));
         const querySnapshot = await getDocs(q);
+        let idsOfFlashcardCollections: String[] = [];
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+            idsOfFlashcardCollections.push(doc.id);
         });
+            return idsOfFlashcardCollections;
+    }
     }
 }
