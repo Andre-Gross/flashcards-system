@@ -1,34 +1,38 @@
 import { Injectable, inject } from '@angular/core';
-import { collection, doc, getDoc, getDocs, Firestore, query } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { Flashcard } from '../interfaces/flashcard.interface';
+import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
 
 @Injectable({
     providedIn: 'root',
 })
+
 export class FlashcardsService {
-    firestore = inject(Firestore);
+    private firestore = inject(Firestore);
 
-    async listFlashcardCollections() {
-        const q = query(collection(this.firestore, 'flashcard-collections'));
-        const querySnapshot = await getDocs(q);
-        let idsOfFlashcardCollections: String[] = [];
-        querySnapshot.forEach((doc) => {
-            idsOfFlashcardCollections.push(doc.id);
-        });
-            return idsOfFlashcardCollections;
+    getCollectionList(collectionPath: string): Observable<ListFlashcardCollectionElement[]> {
+        const colRef = collection(this.firestore, collectionPath);
+        
+        return collectionData(colRef, { idField: 'id' }).pipe(
+            map(docs => docs as ListFlashcardCollectionElement[])
+        );
     }
 
 
-    async returnFlashcardCollectionData(id: string) {
-        const docSnap = await getDoc(this.getDocRef(id));
-        if (docSnap.exists()) {
-            return docSnap.data();
-        } else {
-            return "Collection not found";
-        }
+    getFlashcards(collectionId: string): Observable<Flashcard[]> {
+        const path = `flashcard-collections/${collectionId}/flashcards`;
+        const colRef = collection(this.firestore, path);
+        
+        return collectionData(colRef) as Observable<Flashcard[]>;
     }
 
 
-    getDocRef(id: string) {
-        return doc(this.firestore, "flashcard-collections", id);
+    setFlashCardObject(obj: any): Flashcard {
+        return {
+            frontside: obj.frontside || "",
+            backside: obj.backside || "",
+        };
     }
 }
