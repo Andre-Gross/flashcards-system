@@ -33,7 +33,7 @@ export class FlashcardsService {
 
 
     async addFlashcard(collectionId: string, front: string, back: string): Promise<string> {
-        const docRef = await addDoc(collection(this.firestore, `flashcard-collections/${collectionId}/flashcards`), {
+        const docRef = await addDoc(collection(this.firestore, this.returnFlashcardCollectionPath(collectionId)), {
             front: front,
             back: back
         });
@@ -47,8 +47,13 @@ export class FlashcardsService {
             back: back
         };
 
-        await setDoc(doc(this.firestore, `flashcard-collections/${collectionId}/flashcards`, flashcardId), data);
-        
+        await setDoc(doc(this.firestore, this.returnFlashcardCollectionPath(collectionId), flashcardId), data);
+
         console.log('Flashcard updated successfully');
+    }
+
+
+    returnFlashcardCollectionPath(collectionId: string): string {
+        return `flashcard-collections/${collectionId}/flashcards`;
     }
 }
