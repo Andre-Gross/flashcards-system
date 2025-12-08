@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { addDoc, Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Flashcard } from '../interfaces/flashcard.interface';
 import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
 
@@ -34,5 +34,11 @@ export class FlashcardsService {
             frontside: obj.frontside || "",
             backside: obj.backside || "",
         };
+    async addFlashcard(collectionId: string, front: string, back: string): Promise<string> {
+        const docRef = await addDoc(collection(this.firestore, `flashcard-collections/${collectionId}/flashcards`), {
+            front: front,
+            back: back
+        });
+        return docRef.id;
     }
 }
