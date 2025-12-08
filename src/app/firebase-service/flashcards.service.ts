@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, setDoc } from '@angular/fire/firestore';
+import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { Flashcard } from '../interfaces/flashcard.interface';
 import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
 
@@ -14,53 +13,45 @@ export class FlashcardsService {
 
     private firestore = inject(Firestore);
 
+    private readonly FLASHCARDS_COLLECTION_PATH = 'flashcard-collections';
 
-    getCollectionList(collectionPath: string): Observable<ListFlashcardCollectionElement[]> {
-        const colRef = collection(this.firestore, collectionPath);
 
-        return collectionData(colRef, { idField: 'id' }).pipe(
-            map(docs => docs as ListFlashcardCollectionElement[])
-        );
+    getCollectionList(): Observable<ListFlashcardCollectionElement[]> {
+        const colRef = collection(this.firestore, this.FLASHCARDS_COLLECTION_PATH);
+
+        return collectionData(colRef, { idField: 'id' }) as Observable<ListFlashcardCollectionElement[]>;
     }
 
 
     getFlashcards(collectionId: string): Observable<Flashcard[]> {
-        const path = `flashcard-collections/${collectionId}/flashcards`;
-        const colRef = collection(this.firestore, path);
+        const colRef = collection(this.firestore, this.getSubCollectionPath(collectionId));
 
-        return collectionData(colRef) as Observable<Flashcard[]>;
+        return collectionData(colRef, { idField: 'id' }) as Observable<Flashcard[]>;
     }
 
 
     async addFlashcard(collectionId: string, front: string, back: string): Promise<string> {
-        const docRef = await addDoc(collection(this.firestore, this.returnFlashcardCollectionPath(collectionId)), {
-            front: front,
-            back: back
-        });
+        const colRef = collection(this.firestore, this.getSubCollectionPath(collectionId));
+
+        const docRef = await addDoc(colRef, { front, back });
+
         return docRef.id;
     }
 
 
     async deleteFlashcard(collectionId: string, flashcardId: string): Promise<void> {
-        await deleteDoc(doc(this.firestore, this.returnFlashcardCollectionPath(collectionId), flashcardId));
-
-        console.log('Flashcard deleted successfully');
+        const docRef = doc(this.firestore, this.getSubCollectionPath(collectionId), flashcardId);
+        await deleteDoc(docRef);
     }
 
 
-    async updateFlashcard(collectionId: string, flashcardId: string, front: string, back: string): Promise<void> {
-        const data = {
-            front: front,
-            back: back
-        };
-
-        await setDoc(doc(this.firestore, this.returnFlashcardCollectionPath(collectionId), flashcardId), data);
-
-        console.log('Flashcard updated successfully');
+    async updateFlashcard(collectionId: string, flashcardId: string, data: Partial<Flashcard>): Promise<void> {
+        const docRef = doc(this.firestore, this.getSubCollectionPath(collectionId), flashcardId);
+        await updateDoc(docRef, data);
     }
 
 
-    returnFlashcardCollectionPath(collectionId: string): string {
-        return `flashcard-collections/${collectionId}/flashcards`;
+    private getSubCollectionPath(collectionId: string): string {
+        return `${this.FLASHCARDS_COLLECTION_PATH}/${collectionId}/flashcards`;
     }
 }
