@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'collection',
+    loadComponent: () => import('./flashcard-collection/flashcard-collection.component').then( m => m.FlashcardCollectionComponent)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
