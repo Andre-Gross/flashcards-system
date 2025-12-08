@@ -9,12 +9,15 @@ import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-col
     providedIn: 'root',
 })
 
+
 export class FlashcardsService {
+    
     private firestore = inject(Firestore);
+
 
     getCollectionList(collectionPath: string): Observable<ListFlashcardCollectionElement[]> {
         const colRef = collection(this.firestore, collectionPath);
-        
+
         return collectionData(colRef, { idField: 'id' }).pipe(
             map(docs => docs as ListFlashcardCollectionElement[])
         );
@@ -24,16 +27,11 @@ export class FlashcardsService {
     getFlashcards(collectionId: string): Observable<Flashcard[]> {
         const path = `flashcard-collections/${collectionId}/flashcards`;
         const colRef = collection(this.firestore, path);
-        
+
         return collectionData(colRef) as Observable<Flashcard[]>;
     }
 
 
-    setFlashCardObject(obj: any): Flashcard {
-        return {
-            frontside: obj.frontside || "",
-            backside: obj.backside || "",
-        };
     async addFlashcard(collectionId: string, front: string, back: string): Promise<string> {
         const docRef = await addDoc(collection(this.firestore, `flashcard-collections/${collectionId}/flashcards`), {
             front: front,
