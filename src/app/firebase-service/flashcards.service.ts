@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { addDoc, Firestore, collection, collectionData, doc, setDoc } from '@angular/fire/firestore';
+import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, setDoc } from '@angular/fire/firestore';
 import { Flashcard } from '../interfaces/flashcard.interface';
 import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
 
@@ -38,6 +38,13 @@ export class FlashcardsService {
             back: back
         });
         return docRef.id;
+    }
+
+
+    async deleteFlashcard(collectionId: string, flashcardId: string): Promise<void> {
+        await deleteDoc(doc(this.firestore, this.returnFlashcardCollectionPath(collectionId), flashcardId));
+
+        console.log('Flashcard deleted successfully');
     }
 
 
