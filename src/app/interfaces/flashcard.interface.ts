@@ -1,4 +1,4 @@
 export interface Flashcard {
-    frontside: string;
-    backside: string;
+    front: string;
+    back: string;
 }
