@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, getDocs, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { Flashcard } from '../interfaces/flashcard.interface';
 import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
+import { FlashcardCollection } from '../interfaces/flashcards-collection.interface';
 
 
 /**
@@ -45,8 +46,21 @@ export class FlashcardsService {
      */
     getFlashcards(collectionId: string): Observable<Flashcard[]> {
         const colRef = collection(this.firestore, this.getSubCollectionPath(collectionId));
-
         return collectionData(colRef, { idField: 'id' }) as Observable<Flashcard[]>;
+    }
+
+
+    /**
+     * Creates a new flashcard collection in Firestore.
+     * 
+     * @param {string} title - The title of the new collection.
+     * @param {string} [description=""] - An optional description of the collection. Defaults to an empty string.
+     * @returns {Promise<string>} A promise that resolves to the ID of the newly created collection document.
+     */
+    async addFlashcardCollection(title: string, description: string = ""): Promise<string> {
+        const colRef = collection(this.firestore, this.FLASHCARDS_COLLECTION_PATH);
+        const docRef = await addDoc(colRef, { title, description });
+        return docRef.id;
     }
 
 
@@ -60,10 +74,37 @@ export class FlashcardsService {
      */
     async addFlashcard(collectionId: string, front: string, back: string): Promise<string> {
         const colRef = collection(this.firestore, this.getSubCollectionPath(collectionId));
-
         const docRef = await addDoc(colRef, { front, back });
-
         return docRef.id;
+    }
+
+
+    /**
+     * Deletes a collection and all its contained flashcards using a batch operation.
+     * 
+     * This method performs two steps:
+     * 1. Retrieves all flashcards within the collection's sub-collection.
+     * 2. Deletes all flashcards and the parent collection document atomically.
+     * 
+     * @param {string} collectionId - The ID of the collection to delete.
+     * @returns {Promise<void>} A promise that resolves when the batch deletion is complete.
+     */
+    async deleteFlashcardCollection(collectionId: string): Promise<void> {
+        const subColPath = this.getSubCollectionPath(collectionId);
+        const subColRef = collection(this.firestore, subColPath);
+
+        const snapshot = await getDocs(subColRef);
+
+        const batch = writeBatch(this.firestore);
+
+        snapshot.docs.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        const parentDocRef = doc(this.firestore, this.getCollectionPath(collectionId));
+        batch.delete(parentDocRef);
+
+        await batch.commit();
     }
 
 
@@ -91,6 +132,24 @@ export class FlashcardsService {
     async updateFlashcard(collectionId: string, flashcardId: string, data: Partial<Flashcard>): Promise<void> {
         const docRef = doc(this.firestore, this.getSubCollectionPath(collectionId), flashcardId);
         await updateDoc(docRef, data);
+    }
+
+
+    /**
+     * Updates specific metadata (e.g., title, description) of an existing flashcard collection.
+     * 
+     * @param {string} collectionId - The ID of the collection to update.
+     * @param {Partial<FlashcardCollection>} data - An object containing the fields to update.
+     * @returns {Promise<void>} A promise that resolves when the update is complete.
+     */
+    async updateFlashcardCollection(collectionId: string, data: Partial<FlashcardCollection>): Promise<void> {
+        const docRef = doc(this.firestore, this.getCollectionPath(collectionId));
+        await updateDoc(docRef, data);
+    }
+
+
+    private getCollectionPath(collectionId: string): string {
+        return `${this.FLASHCARDS_COLLECTION_PATH}/${collectionId}`;
     }
 
 
