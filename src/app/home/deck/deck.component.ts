@@ -1,17 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-deck',
-  templateUrl: './deck.component.html',
-  styleUrls: ['./deck.component.scss'],
-  standalone: true,
+    selector: 'app-deck',
+    templateUrl: './deck.component.html',
+    styleUrls: ['./deck.component.scss'],
+    standalone: true,
 })
-export class CollectionComponent  implements OnInit {
+export class DeckComponent implements OnInit {
+    @Input() deck: any;
 
-  constructor() {
-    
-  }
+    constructor() { }
 
-  ngOnInit() {}
+    ngOnInit() { } 
 
 }

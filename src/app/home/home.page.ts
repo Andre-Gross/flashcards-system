@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
 import { Component, inject } from '@angular/core';
+import { DeckComponent } from './deck/deck.component';
 
 import { FlashcardsService } from '../firebase-service/flashcards.service';
 import { FlashcardCollection } from '../interfaces/flashcard-collection.interface';
 
 @Component({
     selector: 'app-home',
+    standalone: true,
+    imports: [DeckComponent],
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
-    standalone: false,
 })
 
 export class HomePage {
