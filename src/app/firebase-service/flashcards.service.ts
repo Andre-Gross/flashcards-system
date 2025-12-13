@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { addDoc, Firestore, collection, collectionData, deleteDoc, doc, getDocs, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { Flashcard } from '../interfaces/flashcard.interface';
 import { ListFlashcardCollectionElement } from '../interfaces/list-flashcard-collection-element-interface';
-import { FlashcardCollection } from '../interfaces/flashcards-collection.interface';
+import { FlashcardCollection } from '../interfaces/flashcard-collection.interface';
 
 
 /**
