@@ -1,9 +1,23 @@
 .flashcard {
-  background-color: #888;
+  background-color: #606c38;
+  color: #fefae0;
+  border-color: #283618;
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px;
   width: 200px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  height: 130px;
   text-align: center;
+
+  .corner-number {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(0,0,0,0.3);
+    color: #fefae0;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+  }
 }
+
