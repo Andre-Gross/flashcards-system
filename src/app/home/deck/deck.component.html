@@ -1,4 +1,4 @@
-<ion-card #card class="flashcard">
+<ion-card appLongPress (longPress)="onLongPress()" class="flashcard">
     <ion-card-header>{{deck.title}}</ion-card-header>
     <ion-card-content>{{deck.description}}</ion-card-content>
 </ion-card>
