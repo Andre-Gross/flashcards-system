@@ -8,26 +8,40 @@ import { GestureController } from '@ionic/angular/standalone';
 
 export class LongPressDirective implements OnDestroy {
   @Output() longPress = new EventEmitter<void>();
+  @Output() swipeLeft = new EventEmitter<void>();
+	@Output() swipeRight = new EventEmitter<void>();
 
   private timer?: ReturnType<typeof setTimeout>;
   private readonly duration = 400;
+  private startX = 0; 
 
   private gesture = this.gestureCtrl.create({
-    el: this.el.nativeElement,
-    gestureName: 'long-press',
-    threshold: 0,
-    onStart: () => this.start(),
-    onEnd: () => this.cancel(),
-    onMove: () => this.cancel(),
-  });
+		el: this.el.nativeElement,
+		gestureName: 'long-press',
+		threshold: 0,
+		onStart: ev => this.start(ev),
+		onMove: ev => this.checkSwipe(ev),
+		onEnd: () => this.cancel(),
+	});
 
   constructor(private el: ElementRef, private gestureCtrl: GestureController) {
     this.gesture.enable();
   }
 
-  private start() {
-    this.timer = setTimeout(() => this.longPress.emit(), this.duration);
-  }
+  private start(ev: any) {
+		this.startX = ev.currentX;
+	  this.timer = setTimeout(() => this.longPress.emit(), this.duration);
+	}
+
+  private checkSwipe(ev: any) {
+		const deltaX = ev.currentX - this.startX;
+
+		if (Math.abs(deltaX) > 100) {
+			this.cancel();
+			if (deltaX > 0) this.swipeRight.emit();
+			else this.swipeLeft.emit();
+		}
+	}
 
   private cancel() {
     clearTimeout(this.timer);
