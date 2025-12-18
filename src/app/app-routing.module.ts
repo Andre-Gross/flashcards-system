@@ -11,6 +11,9 @@ const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
     },
+    { path: 'learn', loadComponent: () =>
+		import('./learn-flashcards/learn-flashcards.component')
+			.then(m => m.LearnFlashcardsComponent)}
 ];
 
 @NgModule({

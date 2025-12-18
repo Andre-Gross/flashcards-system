@@ -1,0 +1,12 @@
+<ion-content>
+  <ion-card (click)="toggleText()">
+    <ion-card-header>
+      <ion-card-title>Anatomy</ion-card-title>
+      <ion-card-subtitle>Das Becken</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      {{ showingFront ? frontText : backText }}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

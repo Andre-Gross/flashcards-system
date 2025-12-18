@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { LearnFlashcardsComponentComponent } from './learn-flashcards-component.component';
+import { LearnFlashcardsComponent } from './learn-flashcards.component';
 
-describe('LearnFlashcardsComponentComponent', () => {
-  let component: LearnFlashcardsComponentComponent;
-  let fixture: ComponentFixture<LearnFlashcardsComponentComponent>;
+describe('LearnFlashcardsComponent', () => {
+  let component: LearnFlashcardsComponent;
+  let fixture: ComponentFixture<LearnFlashcardsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LearnFlashcardsComponentComponent ],
+      declarations: [ LearnFlashcardsComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LearnFlashcardsComponentComponent);
+    fixture = TestBed.createComponent(LearnFlashcardsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

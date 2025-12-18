@@ -11,7 +11,7 @@ import { LongPressDirective } from 'src/app/long-press/long-press';
     templateUrl: './deck.component.html',
     styleUrls: ['./deck.component.scss'],
     standalone: true,
-    imports: [IonCardContent, IonCardHeader, IonCard, LongPressDirective, IonCardTitle],
+    imports: [IonCardContent, IonCard, LongPressDirective, IonCardTitle],
 })
 
 export class DeckComponent {
