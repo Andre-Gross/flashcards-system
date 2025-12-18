@@ -1,8 +1,6 @@
-// import { Component, Input, OnInit } from '@angular/core';
-// import { IonCard, IonCardHeader, IonCardContent } from "@ionic/angular/standalone";
 import { Component, Input } from '@angular/core';
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
-import { LongPressDirective } from 'src/app/long-press/long-press';
+import { GestureHandlerDirective } from 'src/app/gesture-handler/gesture-handler';
 
 
 
@@ -11,7 +9,7 @@ import { LongPressDirective } from 'src/app/long-press/long-press';
     templateUrl: './deck.component.html',
     styleUrls: ['./deck.component.scss'],
     standalone: true,
-    imports: [IonCardContent, IonCard, LongPressDirective, IonCardTitle],
+    imports: [IonCardContent, IonCard, GestureHandlerDirective, IonCardTitle],
 })
 
 export class DeckComponent {

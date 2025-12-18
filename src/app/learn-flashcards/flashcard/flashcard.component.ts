@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent } from '@ionic/angular/standalone';
-import { LongPressDirective } from 'src/app/long-press/long-press';
+import { GestureHandlerDirective } from 'src/app/gesture-handler/gesture-handler';
 
 @Component({
   selector: 'app-flashcard',
   templateUrl: './flashcard.component.html',
   styleUrls: ['./flashcard.component.scss'],
   standalone: true,
-  imports: [IonContent, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, LongPressDirective],
+  imports: [IonContent, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, GestureHandlerDirective],
 })
 
 export class FlashcardComponent  implements OnInit {

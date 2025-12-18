@@ -1,6 +1,5 @@
-<ion-content>
-  <!-- (click)="toggleText()" -->
-  <ion-card appLongPress (swipeLeft)="onSwipeLeft()" (swipeRight)="onSwipeRight()" >
+<ion-content appGestures (swipeLeft)="onSwipeLeft()" (swipeRight)="onSwipeRight()">
+  <ion-card (click)="toggleText()">
     <ion-card-header>
       <ion-card-title>Anatomy</ion-card-title>
       <ion-card-subtitle>Das Becken</ion-card-subtitle>

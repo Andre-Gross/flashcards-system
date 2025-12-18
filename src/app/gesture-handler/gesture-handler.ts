@@ -2,11 +2,11 @@ import { Directive, ElementRef, EventEmitter, Output, OnDestroy } from '@angular
 import { GestureController } from '@ionic/angular/standalone';
 
 @Directive({
-  selector: '[appLongPress]',
+  selector: '[appGestures]',
   standalone: true,
 })
 
-export class LongPressDirective implements OnDestroy {
+export class GestureHandlerDirective implements OnDestroy {
   @Output() longPress = new EventEmitter<void>();
   @Output() swipeLeft = new EventEmitter<void>();
 	@Output() swipeRight = new EventEmitter<void>();
@@ -17,7 +17,7 @@ export class LongPressDirective implements OnDestroy {
 
   private gesture = this.gestureCtrl.create({
 		el: this.el.nativeElement,
-		gestureName: 'long-press',
+		gestureName: 'gestureDefaults',
 		threshold: 0,
 		onStart: ev => this.start(ev),
 		onMove: ev => this.checkSwipe(ev),
