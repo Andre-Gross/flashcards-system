@@ -20,8 +20,8 @@ export class GestureHandlerDirective implements OnDestroy {
 		gestureName: 'gestureDefaults',
 		threshold: 0,
 		onStart: ev => this.start(ev),
-		onMove: ev => this.checkSwipe(ev),
-		onEnd: () => this.cancel(),
+		onMove: () => this.cancel(),
+		onEnd: ev => this.checkSwipe(ev),
 	});
 
   constructor(private el: ElementRef, private gestureCtrl: GestureController) {
@@ -38,8 +38,12 @@ export class GestureHandlerDirective implements OnDestroy {
 
 		if (Math.abs(deltaX) > 100) {
 			this.cancel();
-			if (deltaX > 0) this.swipeRight.emit();
-			else this.swipeLeft.emit();
+			if (deltaX > 0) {
+        this.swipeRight.emit();
+      }
+			else {
+        this.swipeLeft.emit();
+      }
 		}
 	}
 
